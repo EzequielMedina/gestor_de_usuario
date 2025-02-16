@@ -1,4 +1,4 @@
-package user
+package response
 
 import (
 	"gestor_de_usuario/internal/core/domain"
@@ -15,7 +15,7 @@ type userResponse struct {
 }
 
 // newUserResponse is a helper function to create a response body for handling user data
-func newUserResponse(user *domain.User) userResponse {
+func NewUserResponse(user *domain.User) userResponse {
 	return userResponse{
 		ID:        user.ID,
 		Name:      user.FirstName,

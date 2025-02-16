@@ -1,7 +1,8 @@
 package user
 
 import (
-	"gestor_de_usuario/internal/adapter/handler/api"
+	"gestor_de_usuario/internal/adapter/handler/api/request"
+	"gestor_de_usuario/internal/adapter/handler/api/response"
 	"gestor_de_usuario/internal/core/ports"
 	"github.com/gin-gonic/gin"
 )
@@ -19,23 +20,23 @@ func NewUserHandler(userService ports.UserService) *UserHandler {
 }
 
 func (userHandler *UserHandler) CreateUser(context *gin.Context) {
-	var userRequest UserRequest
+	var userRequest request.UserRequest
 	if err := context.BindJSON(&userRequest); err != nil {
-		api.ValidationError(context, err)
+		response.ValidationError(context, err)
 		return
 	}
 
 	newUser, err := userHandler.UserService.CreateUser(&userRequest)
 
 	if err != nil {
-		api.HandleError(context, err)
+		response.HandleError(context, err)
 		return
 	}
 
-	response := newUserResponse(newUser)
+	resp := response.NewUserResponse(newUser)
 
-	api.HandleSuccess(context, response)
+	response.HandleSuccess(context, resp)
 
-	api.HandleSuccess(context, newUser)
+	response.HandleSuccess(context, newUser)
 
 }

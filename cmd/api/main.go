@@ -3,7 +3,10 @@ package main
 import (
 	configuration "gestor_de_usuario/internal/adapter/config"
 	"gestor_de_usuario/internal/adapter/handler/api"
+	userHandler "gestor_de_usuario/internal/adapter/handler/api/user"
+	userService "gestor_de_usuario/internal/core/service/user"
 	"gestor_de_usuario/internal/storage/mysql"
+	userResitory "gestor_de_usuario/internal/storage/mysql/repository"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 )
@@ -21,7 +24,12 @@ func main() {
 	}
 	defer db.Close()
 
-	router, err := api.NewRouter(config.Http)
+	//Dependency Injection
+	userRepor := userResitory.NewUserRepository(db)
+	userSrv := userService.NewUserService(userRepor)
+	userHand := userHandler.NewUserHandler(userSrv)
+
+	router, err := api.NewRouter(config.Http, *userHand)
 	if err != nil {
 		log.Fatalf("Could not create the router: %v", err)
 	}

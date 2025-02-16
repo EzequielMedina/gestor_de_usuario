@@ -2,6 +2,7 @@ package api
 
 import (
 	"gestor_de_usuario/internal/adapter/config"
+	"gestor_de_usuario/internal/adapter/handler/api/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -9,7 +10,10 @@ type Router struct {
 	*gin.Engine
 }
 
-func NewRouter(config *config.HTTP) (*Router, error) {
+func NewRouter(
+	config *config.HTTP,
+	userHandler user.UserHandler,
+) (*Router, error) {
 	// Disable debug mode in production
 	if config.Env == "production" {
 		gin.SetMode(gin.ReleaseMode)
@@ -19,6 +23,14 @@ func NewRouter(config *config.HTTP) (*Router, error) {
 	router.Use(gin.Logger())
 
 	//se agregan los endpoints
+
+	v1 := router.Group("/v1")
+	{
+		users := v1.Group("/userHanlder")
+		{
+			users.POST("/create", userHandler.CreateUser)
+		}
+	}
 
 	return &Router{
 		router,
