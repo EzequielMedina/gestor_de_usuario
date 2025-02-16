@@ -19,11 +19,11 @@ func NewUserService(repo ports.UserRepository) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(user *request.UserRequest) (newUser *domain.User, error error) {
+func (s *UserService) CreateUser(user *request.UserRequest) (*domain.User, error) {
 	//validar que no existe
 
 	// set date
-
+	var newUser domain.User
 	newUser.ID = uuid.New().String()
 	hashPassword, err := util.HashPassword(user.Password)
 
@@ -37,12 +37,13 @@ func (s *UserService) CreateUser(user *request.UserRequest) (newUser *domain.Use
 	newUser.Email = user.Email
 	newUser.FirstName = user.Name
 	newUser.LastName = user.LastName
-	_, err = s.Repo.CreateUser(newUser)
+	newUser.UpdatedAt = time.Now().UTC()
+	_, err = s.Repo.CreateUser(&newUser)
 
 	if err != nil {
 		return nil, domain.ErrInternal
 	}
 
-	return newUser, nil
+	return &newUser, nil
 
 }

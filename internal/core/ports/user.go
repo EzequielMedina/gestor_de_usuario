@@ -10,5 +10,5 @@ type UserRepository interface {
 }
 
 type UserService interface {
-	CreateUser(user *request.UserRequest) (newUser *domain.User, error error)
+	CreateUser(user *request.UserRequest) (*domain.User, error)
 }

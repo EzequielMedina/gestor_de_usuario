@@ -26,7 +26,7 @@ func NewRouter(
 
 	v1 := router.Group("/v1")
 	{
-		users := v1.Group("/userHanlder")
+		users := v1.Group("/users")
 		{
 			users.POST("/create", userHandler.CreateUser)
 		}
