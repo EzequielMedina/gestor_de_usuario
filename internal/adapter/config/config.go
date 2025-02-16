@@ -57,8 +57,8 @@ func New() (*Container, error) {
 
 	http := &HTTP{
 		Env:            os.Getenv("APP_ENV"),
-		URL:            os.Getenv("APP_URL"),
-		Port:           os.Getenv("APP_PORT"),
+		URL:            os.Getenv("HTTP_URL"),
+		Port:           os.Getenv("HTTP_PORT"),
 		AllowedOrigins: os.Getenv("APP_ALLOWED_ORIGINS"),
 	}
 

@@ -1,7 +1,8 @@
-package api
+package main
 
 import (
 	configuration "gestor_de_usuario/internal/adapter/config"
+	"gestor_de_usuario/internal/adapter/handler/api"
 	"gestor_de_usuario/internal/storage/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
@@ -19,4 +20,19 @@ func main() {
 		log.Fatalf("Could not connect to the database: %v", err)
 	}
 	defer db.Close()
+
+	router, err := api.NewRouter(config.Http)
+	if err != nil {
+		log.Fatalf("Could not create the router: %v", err)
+	}
+
+	listenAddr := config.Http.URL + ":" + config.Http.Port
+
+	// Start the server
+	err = router.Serve(listenAddr)
+
+	if err != nil {
+		log.Fatalf("Could not start the server: %v", err)
+	}
+
 }
