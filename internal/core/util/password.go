@@ -16,3 +16,13 @@ func HashPassword(password string) (string, error) {
 func ComparePassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
+
+func IsValidPassword(password string) bool {
+	//contraseña de al menos 8 caracteres
+
+	if len(password) < 8 {
+		return false
+	}
+
+	return true
+}

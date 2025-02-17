@@ -36,5 +36,12 @@ var (
 	// ErrUnauthorized is an error for when the user is unauthorized
 	ErrUnauthorized = errors.New("user is unauthorized to access the resource")
 	// ErrForbidden is an error for when the user is forbidden to access the resource
-	ErrForbidden = errors.New("user is forbidden to access the resource")
+	ErrForbidden          = errors.New("user is forbidden to access the resource")
+	ErrEmailRequired      = errors.New("email is required")
+	ErrInvalidEmail       = errors.New("invalid email format")
+	ErrEmailAlreadyExists = errors.New("email already exists")
+	ErrNameRequired       = errors.New("name is required")
+	ErrLastNameRequired   = errors.New("last name is required")
+	ErrPasswordRequired   = errors.New("password is required")
+	ErrInvalidPassword    = errors.New("password must be at least 8 characters long")
 )

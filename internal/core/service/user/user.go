@@ -20,7 +20,11 @@ func NewUserService(repo ports.UserRepository) *UserService {
 }
 
 func (s *UserService) CreateUser(user *request.UserRequest) (*domain.User, error) {
-	//validar que no existe
+
+	done, errs := validateCreateUser(user, s)
+	if done {
+		return nil, errs
+	}
 
 	// set date
 	var newUser domain.User
@@ -46,4 +50,55 @@ func (s *UserService) CreateUser(user *request.UserRequest) (*domain.User, error
 
 	return &newUser, nil
 
+}
+
+func validateCreateUser(user *request.UserRequest, s *UserService) (bool, error) {
+	//validar que el email no sea vacio
+
+	if user.Email == "" {
+		return true, domain.ErrEmailRequired
+	}
+
+	//validar que el email sea un email valido
+
+	if !util.IsValidEmail(user.Email) {
+		return true, domain.ErrInvalidEmail
+	}
+
+	//validar que el email no exista en la base de datos
+
+	userDbMail, err := s.Repo.GetUserByEmail(user.Email)
+
+	if err != nil {
+		return true, domain.ErrInternal
+	}
+
+	if userDbMail != nil {
+		return true, domain.ErrEmailAlreadyExists
+	}
+
+	//validar que el nombre no sea vacio
+
+	if user.Name == "" {
+		return true, domain.ErrNameRequired
+	}
+
+	//validar que el apellido no sea vacio
+
+	if user.LastName == "" {
+		return true, domain.ErrLastNameRequired
+	}
+
+	//validar que la contraseña no sea vacia
+
+	if user.Password == "" {
+		return true, domain.ErrPasswordRequired
+	}
+
+	//validamos que la contraseña sea segura mas de 8 digitos alfanumerica con un signo
+
+	if !util.IsValidPassword(user.Password) {
+		return true, domain.ErrInvalidPassword
+	}
+	return false, nil
 }

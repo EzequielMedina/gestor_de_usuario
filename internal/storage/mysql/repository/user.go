@@ -42,3 +42,31 @@ func (userRepository *UserRepository) CreateUser(user *domain.User) (id interfac
 	return id, nil
 
 }
+
+func (userRepository *UserRepository) GetUserByEmail(email string) (*domain.User, error) {
+
+	query := `
+		SELECT
+			usuario_id, nombre, apellido, email, contrasena, fecha_creacion, fecha_modificacion, activo
+		FROM usuarios
+		WHERE email = ? and activo = 1
+	`
+	row := userRepository.Db.QueryRow(query, email)
+
+	user := domain.User{}
+	err := row.Scan(
+		&user.ID,
+		&user.FirstName,
+		&user.LastName,
+		&user.Email,
+		&user.Password,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.Active,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
