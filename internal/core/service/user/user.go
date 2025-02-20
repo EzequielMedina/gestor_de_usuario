@@ -4,55 +4,21 @@ import (
 	"gestor_de_usuario/internal/adapter/handler/api/request"
 	"gestor_de_usuario/internal/core/domain"
 	"gestor_de_usuario/internal/core/ports"
-	"gestor_de_usuario/internal/core/util"
-	"github.com/google/uuid"
-	"time"
 )
 
 type UserService struct {
-	Repo ports.UserRepository
+	Repo  ports.UserRepository
+	Utils ports.UtilService
 }
 
-func NewUserService(repo ports.UserRepository) *UserService {
+func NewUserService(repo ports.UserRepository, util ports.UtilService) *UserService {
 	return &UserService{
-		Repo: repo,
+		Repo:  repo,
+		Utils: util,
 	}
 }
 
-func (s *UserService) CreateUser(user *request.UserRequest) (*domain.User, error) {
-
-	done, errs := validateCreateUser(user, s)
-	if done {
-		return nil, errs
-	}
-
-	// set date
-	var newUser domain.User
-	newUser.ID = uuid.New().String()
-	hashPassword, err := util.HashPassword(user.Password)
-
-	if err != nil {
-		return nil, domain.ErrInternal
-	}
-
-	newUser.CreatedAt = time.Now().UTC()
-	newUser.Active = true
-	newUser.Password = hashPassword
-	newUser.Email = user.Email
-	newUser.FirstName = user.Name
-	newUser.LastName = user.LastName
-	newUser.UpdatedAt = time.Now().UTC()
-	_, err = s.Repo.CreateUser(&newUser)
-
-	if err != nil {
-		return nil, domain.ErrInternal
-	}
-
-	return &newUser, nil
-
-}
-
-func validateCreateUser(user *request.UserRequest, s *UserService) (bool, error) {
+func ValidateCreateUser(user *request.UserRequest, s *UserService) (bool, error) {
 	//validar que el email no sea vacio
 
 	if user.Email == "" {
@@ -61,7 +27,7 @@ func validateCreateUser(user *request.UserRequest, s *UserService) (bool, error)
 
 	//validar que el email sea un email valido
 
-	if !util.IsValidEmail(user.Email) {
+	if !s.Utils.IsValidEmail(user.Email) {
 		return true, domain.ErrInvalidEmail
 	}
 
@@ -97,7 +63,7 @@ func validateCreateUser(user *request.UserRequest, s *UserService) (bool, error)
 
 	//validamos que la contraseña sea segura mas de 8 digitos alfanumerica con un signo
 
-	if !util.IsValidPassword(user.Password) {
+	if !s.Utils.IsValidPassword(user.Password) {
 		return true, domain.ErrInvalidPassword
 	}
 	return false, nil

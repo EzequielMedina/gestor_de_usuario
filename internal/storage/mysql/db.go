@@ -8,7 +8,7 @@ import (
 
 func Connect(config *config.DB) (*sql.DB, error) {
 	// Open the connection
-	dns := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",
+	dns := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true",
 		config.User,
 		config.Password,
 		config.Host,

@@ -3,6 +3,7 @@ package user
 import (
 	"database/sql"
 	"gestor_de_usuario/internal/core/domain"
+	"time"
 )
 
 type UserRepository struct {
@@ -54,16 +55,25 @@ func (userRepository *UserRepository) GetUserByEmail(email string) (*domain.User
 	row := userRepository.Db.QueryRow(query, email)
 
 	user := domain.User{}
+	var createdAt, updatedAt []byte
+
 	err := row.Scan(
 		&user.ID,
 		&user.FirstName,
 		&user.LastName,
 		&user.Email,
 		&user.Password,
-		&user.CreatedAt,
-		&user.UpdatedAt,
+		&createdAt,
+		&updatedAt,
 		&user.Active,
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convertir los valores de []byte a time.Time
+	user.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", string(createdAt))
+	user.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", string(updatedAt))
 	if err != nil {
 		return nil, err
 	}

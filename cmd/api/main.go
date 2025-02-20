@@ -25,8 +25,10 @@ func main() {
 	defer db.Close()
 
 	//Dependency Injection
+	utilSrv := userService.NewUtilService()
+
 	userRepor := userResitory.NewUserRepository(db)
-	userSrv := userService.NewUserService(userRepor)
+	userSrv := userService.NewUserService(userRepor, utilSrv)
 	userHand := userHandler.NewUserHandler(userSrv)
 
 	router, err := api.NewRouter(config.Http, *userHand)

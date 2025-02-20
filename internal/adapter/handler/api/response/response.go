@@ -79,6 +79,13 @@ var errorStatusMap = map[error]int{
 	domain.ErrNoUpdatedData:              http.StatusBadRequest,
 	domain.ErrInsufficientStock:          http.StatusBadRequest,
 	domain.ErrInsufficientPayment:        http.StatusBadRequest,
+	domain.ErrNameRequired:               http.StatusBadRequest,
+	domain.ErrLastNameRequired:           http.StatusBadRequest,
+	domain.ErrInvalidEmail:               http.StatusBadRequest,
+	domain.ErrInvalidPassword:            http.StatusBadRequest,
+	domain.ErrEmailRequired:              http.StatusBadRequest,
+	domain.ErrInvalidEmail:               http.StatusBadRequest,
+	domain.ErrEmailAlreadyExists:         http.StatusBadRequest,
 }
 
 // handleSuccess sends a success response with the specified status code and optional data
