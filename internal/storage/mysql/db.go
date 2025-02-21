@@ -1,12 +1,13 @@
 package mysql
 
 import (
-	"database/sql"
 	"fmt"
 	"gestor_de_usuario/internal/adapter/config"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func Connect(config *config.DB) (*sql.DB, error) {
+func Connect(config *config.DB) (*gorm.DB, error) {
 	// Open the connection
 	dns := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true",
 		config.User,
@@ -16,11 +17,8 @@ func Connect(config *config.DB) (*sql.DB, error) {
 		config.Name,
 	)
 
-	db, err := sql.Open(config.Connection, dns)
+	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
-		return nil, err
-	}
-	if err := db.Ping(); err != nil {
 		return nil, err
 	}
 

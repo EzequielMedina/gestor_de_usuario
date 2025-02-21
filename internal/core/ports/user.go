@@ -12,4 +12,5 @@ type UserRepository interface {
 
 type UserService interface {
 	CreateUser(user *request.UserRequest) (*domain.User, error)
+	GetUserByEmail(email string) (*domain.User, error)
 }

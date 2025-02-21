@@ -29,7 +29,9 @@ func NewRouter(
 		users := v1.Group("/users")
 		{
 			users.POST("/create", userHandler.CreateUser)
+			users.GET("getByUserEmail", userHandler.GetUserByEmail)
 		}
+
 	}
 
 	return &Router{

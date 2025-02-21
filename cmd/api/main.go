@@ -5,6 +5,7 @@ import (
 	"gestor_de_usuario/internal/adapter/handler/api"
 	userHandler "gestor_de_usuario/internal/adapter/handler/api/user"
 	userService "gestor_de_usuario/internal/core/service/user"
+	"gestor_de_usuario/internal/core/util"
 	"gestor_de_usuario/internal/storage/mysql"
 	userResitory "gestor_de_usuario/internal/storage/mysql/repository"
 	_ "github.com/go-sql-driver/mysql"
@@ -22,10 +23,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not connect to the database: %v", err)
 	}
-	defer db.Close()
 
 	//Dependency Injection
-	utilSrv := userService.NewUtilService()
+	utilSrv := util.NewUtilService()
 
 	userRepor := userResitory.NewUserRepository(db)
 	userSrv := userService.NewUserService(userRepor, utilSrv)

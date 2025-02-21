@@ -19,24 +19,10 @@ func NewUserService(repo ports.UserRepository, util ports.UtilService) *UserServ
 }
 
 func ValidateCreateUser(user *request.UserRequest, s *UserService) (bool, error) {
-	//validar que el email no sea vacio
-
-	if user.Email == "" {
-		return true, domain.ErrEmailRequired
-	}
-
-	//validar que el email sea un email valido
-
-	if !s.Utils.IsValidEmail(user.Email) {
-		return true, domain.ErrInvalidEmail
-	}
-
-	//validar que el email no exista en la base de datos
-
-	userDbMail, err := s.Repo.GetUserByEmail(user.Email)
+	userDbMail, err := ValidarEmail(user.Email, s)
 
 	if err != nil {
-		return true, domain.ErrInternal
+		return true, err
 	}
 
 	if userDbMail != nil {
@@ -67,4 +53,32 @@ func ValidateCreateUser(user *request.UserRequest, s *UserService) (bool, error)
 		return true, domain.ErrInvalidPassword
 	}
 	return false, nil
+}
+
+func ValidarEmail(email string, s *UserService) (*domain.User, error) {
+	//validar que el email no sea vacio
+
+	if email == "" {
+		return nil, domain.ErrEmailRequired
+	}
+
+	//validar que el email sea un email valido
+
+	if !s.Utils.IsValidEmail(email) {
+		return nil, domain.ErrInvalidEmail
+	}
+
+	//validar que el email no exista en la base de datos
+
+	userDbMail, err := s.Repo.GetUserByEmail(email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if userDbMail != nil {
+		return userDbMail, nil
+	}
+
+	return nil, nil
 }

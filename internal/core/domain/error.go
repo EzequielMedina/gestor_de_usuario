@@ -44,4 +44,5 @@ var (
 	ErrLastNameRequired   = errors.New("last name is required")
 	ErrPasswordRequired   = errors.New("password is required")
 	ErrInvalidPassword    = errors.New("password must be at least 8 characters long")
+	ErrEmailNotFound      = errors.New("email not found")
 )
