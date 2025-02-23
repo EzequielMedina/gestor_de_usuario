@@ -82,3 +82,49 @@ func ValidarEmail(email string, s *UserService) (*domain.User, error) {
 
 	return nil, nil
 }
+func UpdateEmail(userDb *domain.User, email string, s *UserService) error {
+	if email == "" {
+		return nil
+	}
+
+	userEmailDB, err := s.Repo.GetUserByEmail(email)
+
+	if err != nil {
+		return err
+	}
+
+	if userEmailDB != nil {
+		return domain.ErrEmailAlreadyExists
+	}
+
+	userDb.Email = email
+	return nil
+}
+
+func UpdateNames(userDb *domain.User, name string, lastName string) {
+	if name != "" {
+		userDb.FirstName = name
+	}
+	if lastName != "" {
+		userDb.LastName = lastName
+	}
+}
+
+func UpdatePassword(userDb *domain.User, password string, s *UserService) error {
+	if password == "" {
+		return nil
+	}
+
+	if !s.Utils.IsValidPassword(password) {
+		return domain.ErrInvalidPassword
+	}
+
+	hashPassword, err := s.Utils.HashPassword(password)
+
+	if err != nil {
+		return err
+	}
+
+	userDb.Password = hashPassword
+	return nil
+}

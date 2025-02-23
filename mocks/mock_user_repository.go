@@ -23,6 +23,16 @@ type MockUserRepository struct {
 	isgomock struct{}
 }
 
+// GetById implements ports.UserRepository.
+func (m *MockUserRepository) GetById(id string) (*domain.User, error) {
+	panic("unimplemented")
+}
+
+// UpdateUser implements ports.UserRepository.
+func (m *MockUserRepository) UpdateUser(user *domain.User) error {
+	panic("unimplemented")
+}
+
 // MockUserRepositoryMockRecorder is the mock recorder for MockUserRepository.
 type MockUserRepositoryMockRecorder struct {
 	mock *MockUserRepository

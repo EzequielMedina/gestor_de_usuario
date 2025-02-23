@@ -39,3 +39,30 @@ func (userRepository *UserRepository) GetUserByEmail(email string) (*domain.User
 
 	return &user, nil
 }
+
+func (UserRepository *UserRepository) UpdateUser(user *domain.User) error {
+
+	result := UserRepository.Db.Table("Usuarios").Save(&user)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func (UserRepository *UserRepository) GetById(id string) (*domain.User, error) {
+
+	var user domain.User
+	result := UserRepository.Db.Table("Usuarios").Where("id = ?", id).Find(&user)
+
+	if result.Error != nil {
+		return nil, domain.ErrDataNotFound
+	}
+
+	if result.RowsAffected == 0 {
+		return nil, domain.ErrIdNotFound
+	}
+
+	return &user, nil
+}

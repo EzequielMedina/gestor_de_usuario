@@ -45,4 +45,5 @@ var (
 	ErrPasswordRequired   = errors.New("password is required")
 	ErrInvalidPassword    = errors.New("password must be at least 8 characters long")
 	ErrEmailNotFound      = errors.New("email not found")
+	ErrIdNotFound         = errors.New("ID not found")
 )

@@ -8,9 +8,12 @@ import (
 type UserRepository interface {
 	CreateUser(user *domain.User) (id interface{}, error error)
 	GetUserByEmail(email string) (*domain.User, error)
+	UpdateUser(user *domain.User) error
+	GetById(id string) (*domain.User, error)
 }
 
 type UserService interface {
 	CreateUser(user *request.UserRequest) (*domain.User, error)
 	GetUserByEmail(email string) (*domain.User, error)
+	UpdateUser(user *request.UserUpdateRequest) error
 }

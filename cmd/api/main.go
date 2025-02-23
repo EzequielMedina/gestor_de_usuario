@@ -8,8 +8,9 @@ import (
 	"gestor_de_usuario/internal/core/util"
 	"gestor_de_usuario/internal/storage/mysql"
 	userResitory "gestor_de_usuario/internal/storage/mysql/repository"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
