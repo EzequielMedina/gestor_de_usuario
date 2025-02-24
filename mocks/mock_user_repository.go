@@ -23,16 +23,6 @@ type MockUserRepository struct {
 	isgomock struct{}
 }
 
-// GetById implements ports.UserRepository.
-func (m *MockUserRepository) GetById(id string) (*domain.User, error) {
-	panic("unimplemented")
-}
-
-// UpdateUser implements ports.UserRepository.
-func (m *MockUserRepository) UpdateUser(user *domain.User) error {
-	panic("unimplemented")
-}
-
 // MockUserRepositoryMockRecorder is the mock recorder for MockUserRepository.
 type MockUserRepositoryMockRecorder struct {
 	mock *MockUserRepository
@@ -65,6 +55,21 @@ func (mr *MockUserRepositoryMockRecorder) CreateUser(user any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserRepository)(nil).CreateUser), user)
 }
 
+// GetById mocks base method.
+func (m *MockUserRepository) GetById(id string) (*domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetById", id)
+	ret0, _ := ret[0].(*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetById indicates an expected call of GetById.
+func (mr *MockUserRepositoryMockRecorder) GetById(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetById", reflect.TypeOf((*MockUserRepository)(nil).GetById), id)
+}
+
 // GetUserByEmail mocks base method.
 func (m *MockUserRepository) GetUserByEmail(email string) (*domain.User, error) {
 	m.ctrl.T.Helper()
@@ -78,4 +83,18 @@ func (m *MockUserRepository) GetUserByEmail(email string) (*domain.User, error) 
 func (mr *MockUserRepositoryMockRecorder) GetUserByEmail(email any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByEmail", reflect.TypeOf((*MockUserRepository)(nil).GetUserByEmail), email)
+}
+
+// UpdateUser mocks base method.
+func (m *MockUserRepository) UpdateUser(user *domain.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUser", user)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUser indicates an expected call of UpdateUser.
+func (mr *MockUserRepositoryMockRecorder) UpdateUser(user any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockUserRepository)(nil).UpdateUser), user)
 }

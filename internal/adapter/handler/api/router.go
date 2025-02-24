@@ -2,6 +2,7 @@ package api
 
 import (
 	"gestor_de_usuario/internal/adapter/config"
+	"gestor_de_usuario/internal/adapter/handler/api/organization"
 	"gestor_de_usuario/internal/adapter/handler/api/user"
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +14,7 @@ type Router struct {
 func NewRouter(
 	config *config.HTTP,
 	userHandler user.UserHandler,
+	organizationHandler organization.OrganizationHandler,
 ) (*Router, error) {
 	// Disable debug mode in production
 	if config.Env == "production" {
@@ -30,6 +32,11 @@ func NewRouter(
 		{
 			users.POST("/create", userHandler.CreateUser)
 			users.GET("getByUserEmail", userHandler.GetUserByEmail)
+			users.PUT("/updateUser/:id", userHandler.UpdateUser)
+		}
+		organizations := v1.Group("/organizations")
+		{
+			organizations.POST("/create", organizationHandler.CreateOrganization)
 		}
 
 	}

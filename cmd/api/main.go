@@ -3,14 +3,15 @@ package main
 import (
 	configuration "gestor_de_usuario/internal/adapter/config"
 	"gestor_de_usuario/internal/adapter/handler/api"
+	organizationHandler "gestor_de_usuario/internal/adapter/handler/api/organization"
 	userHandler "gestor_de_usuario/internal/adapter/handler/api/user"
+	"gestor_de_usuario/internal/core/service/organization"
 	userService "gestor_de_usuario/internal/core/service/user"
 	"gestor_de_usuario/internal/core/util"
 	"gestor_de_usuario/internal/storage/mysql"
-	userResitory "gestor_de_usuario/internal/storage/mysql/repository"
-	"log"
-
+	repository "gestor_de_usuario/internal/storage/mysql/repository"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
 )
 
 func main() {
@@ -28,11 +29,15 @@ func main() {
 	//Dependency Injection
 	utilSrv := util.NewUtilService()
 
-	userRepor := userResitory.NewUserRepository(db)
+	userRepor := repository.NewUserRepository(db)
 	userSrv := userService.NewUserService(userRepor, utilSrv)
 	userHand := userHandler.NewUserHandler(userSrv)
 
-	router, err := api.NewRouter(config.Http, *userHand)
+	orgaRepo := repository.NewOrganizationRepository(db)
+	orgaServ := organization.NewUserService(orgaRepo)
+	orgaHandler := organizationHandler.NewOrganizationHandler(orgaServ)
+
+	router, err := api.NewRouter(config.Http, *userHand, *orgaHandler)
 	if err != nil {
 		log.Fatalf("Could not create the router: %v", err)
 	}

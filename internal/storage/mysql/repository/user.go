@@ -1,4 +1,4 @@
-package user
+package repository
 
 import (
 	"gestor_de_usuario/internal/core/domain"
@@ -54,7 +54,7 @@ func (UserRepository *UserRepository) UpdateUser(user *domain.User) error {
 func (UserRepository *UserRepository) GetById(id string) (*domain.User, error) {
 
 	var user domain.User
-	result := UserRepository.Db.Table("Usuarios").Where("id = ?", id).Find(&user)
+	result := UserRepository.Db.Table("Usuarios").Where("usuario_id = ?", id).Find(&user)
 
 	if result.Error != nil {
 		return nil, domain.ErrDataNotFound

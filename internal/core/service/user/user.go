@@ -90,11 +90,16 @@ func UpdateEmail(userDb *domain.User, email string, s *UserService) error {
 	userEmailDB, err := s.Repo.GetUserByEmail(email)
 
 	if err != nil {
-		return err
+		if err.Error() != domain.ErrEmailNotFound.Error() {
+			return err
+		}
 	}
 
 	if userEmailDB != nil {
 		return domain.ErrEmailAlreadyExists
+	}
+	if !s.Utils.IsValidEmail(email) {
+		return domain.ErrInvalidEmail
 	}
 
 	userDb.Email = email
